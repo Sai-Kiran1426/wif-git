@@ -1,0 +1,46 @@
+name: Deploy to Cloud Run via Workload Identity Federation
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          token_format: 'access_token'
+          workload_identity_provider: 'projects//locations/global/workloadIdentityPools/github-pool/providers/github-provider'
+          service_account: 'github-actions-sa@YOUR_PROJECT_ID.iam.gserviceaccount.com'
+
+      - name: Set up gcloud
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: 'saikiran9640'
+
+      - name: Configure Docker
+        run: |
+          gcloud auth configure-docker us-central1-docker.pkg.dev
+
+      - name: Build and Push Docker Image
+        run: |
+          docker build -t us-central1-docker.pkg.dev/188263521940/hello-repo1/hello-app:latest .
+          docker push us-central1-docker.pkg.dev/saikiran9640/hello-repo1/hello-app:latest
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy hello-app \
+            --image us-central1-docker.pkg.dev/saikiran9640/hello-repo1/hello-app:latest \
+            --platform managed \
+            --region us-central1 \
+            --allow-unauthenticated
