@@ -20,8 +20,8 @@ jobs:
         uses: google-github-actions/auth@v1
         with:
           token_format: 'access_token'
-          workload_identity_provider: 'projects//locations/global/workloadIdentityPools/github-pool/providers/github-provider'
-          service_account: 'github-actions-sa@YOUR_PROJECT_ID.iam.gserviceaccount.com'
+          workload_identity_provider: 'projects//locations/global/workloadIdentityPools/github-pool1/providers/github-provider'
+          service_account: 'github-actions@saikiran9640.iam.gserviceaccount.com'
 
       - name: Set up gcloud
         uses: google-github-actions/setup-gcloud@v2
