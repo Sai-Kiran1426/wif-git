@@ -34,7 +34,7 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t us-central1-docker.pkg.dev/188263521940/hello-repo1/hello-app:latest .
+          docker build -t us-central1-docker.pkg.dev/saikiran9640/hello-repo1/hello-app:latest .
           docker push us-central1-docker.pkg.dev/saikiran9640/hello-repo1/hello-app:latest
 
       - name: Deploy to Cloud Run
